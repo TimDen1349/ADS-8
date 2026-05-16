@@ -7,8 +7,8 @@ void makeTree(BST<std::string>&, const char*);
 void printFreq(BST<std::string>&);
 
 int main() {
-	BST<std::string> dic;
-	makeTree(dic, "src/war_peace.txt");
-	printFreq(dic);
-	return 0;
+  BST<std::string> dic;
+  makeTree(dic, "src/war_peace.txt");
+  printFreq(dic);
+  return 0;
 }
