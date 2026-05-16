@@ -27,9 +27,7 @@ private:
     }
 
     Node* connect(Node* current, const T& value) {
-        if (current == nullptr) {
-            return createNode(value);
-        }
+        if (current == nullptr) return createNode(value);
         if (value < current->info) {
             current->left = connect(current->left, value);
         }
@@ -42,7 +40,8 @@ private:
         return current;
     }
 
-    void collectData(Node* current, std::vector<std::pair<T, int>>& buffer) {
+    void collectData(Node* current,
+        std::vector<std::pair<T, int>>& buffer) {
         if (current == nullptr) return;
         collectData(current->left, buffer);
         buffer.push_back({ current->info, current->count });
@@ -77,21 +76,13 @@ private:
 public:
     BST() : top(nullptr) {}
 
-    ~BST() {
-        deleteAll(top);
-    }
+    ~BST() { deleteAll(top); }
 
-    void insert(const T& value) {
-        top = connect(top, value);
-    }
+    void insert(const T& value) { top = connect(top, value); }
 
-    int depth() const {
-        return computeHeight(top);
-    }
+    int depth() const { return computeHeight(top); }
 
-    int search(const T& value) const {
-        return findCount(top, value);
-    }
+    int search(const T& value) const { return findCount(top, value); }
 
     void collectInfo(std::vector<std::pair<T, int>>& output) {
         collectData(top, output);
