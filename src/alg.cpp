@@ -1,15 +1,28 @@
 // Copyright 2021 NNTU-CS
 #include <algorithm>
-#include <utility>
-#include <vector>
 #include <cctype>
 #include <fstream>
-#include <string>
-#include "bst.h"
 #include <iostream>
+#include <string>
+#include <utility>
+#include <vector>
 
-bool isEnglish(char s);
-char con_to_low(char s);
+#include "bst.h"
+
+namespace {
+
+    bool isEnglish(char ch) {
+        return (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z');
+    }
+
+    char toLower(char ch) {
+        if (ch >= 'A' && ch <= 'Z') {
+            return ch + ('a' - 'A');
+        }
+        return ch;
+    }
+
+}
 
 void makeTree(BST<std::string>& tree, const char* source) {
     std::ifstream input(source);
@@ -17,11 +30,12 @@ void makeTree(BST<std::string>& tree, const char* source) {
         std::cerr << "Cannot open file" << std::endl;
         return;
     }
+
     std::string buffer;
-    char cur_char;
-    while (input.get(cur_char)) {
-        if (isEnglish(cur_char)) {
-            buffer.push_back(con_to_low(cur_char));
+    char curChar;
+    while (input.get(curChar)) {
+        if (isEnglish(curChar)) {
+            buffer.push_back(toLower(curChar));
         }
         else {
             if (!buffer.empty()) {
@@ -36,7 +50,7 @@ void makeTree(BST<std::string>& tree, const char* source) {
     input.close();
 }
 
-bool sort_by_freq(const std::pair<std::string, int>& first,
+bool compareByFreq(const std::pair<std::string, int>& first,
     const std::pair<std::string, int>& second) {
     return first.second > second.second;
 }
@@ -44,7 +58,8 @@ bool sort_by_freq(const std::pair<std::string, int>& first,
 void printFreq(BST<std::string>& voc) {
     std::vector<std::pair<std::string, int>> items;
     voc.collectInfo(items);
-    std::sort(items.begin(), items.end(), sort_by_freq);
+    std::sort(items.begin(), items.end(), compareByFreq);
+
     std::ofstream output("result/freq.txt");
     for (const auto& entry : items) {
         std::cout << entry.first << " - " << entry.second << std::endl;
@@ -53,15 +68,4 @@ void printFreq(BST<std::string>& voc) {
         }
     }
     output.close();
-}
-
-bool isEnglish(char s) {
-    return (s >= 'a' && s <= 'z') || (s >= 'A' && s <= 'Z');
-}
-
-char con_to_low(char s) {
-    if (s >= 'A' && s <= 'Z') {
-        return s + ('a' - 'A');
-    }
-    return s;
 }
