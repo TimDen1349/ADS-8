@@ -16,13 +16,11 @@ namespace {
     }
 
     char toLower(char ch) {
-        if (ch >= 'A' && ch <= 'Z') {
-            return ch + ('a' - 'A');
-        }
+        if (ch >= 'A' && ch <= 'Z') return ch + ('a' - 'A');
         return ch;
     }
 
-}
+}  // namespace
 
 void makeTree(BST<std::string>& tree, const char* source) {
     std::ifstream input(source);
@@ -44,9 +42,7 @@ void makeTree(BST<std::string>& tree, const char* source) {
             }
         }
     }
-    if (!buffer.empty()) {
-        tree.insert(buffer);
-    }
+    if (!buffer.empty()) tree.insert(buffer);
     input.close();
 }
 
@@ -63,9 +59,7 @@ void printFreq(BST<std::string>& voc) {
     std::ofstream output("result/freq.txt");
     for (const auto& entry : items) {
         std::cout << entry.first << " - " << entry.second << std::endl;
-        if (output.is_open()) {
-            output << entry.first << " - " << entry.second << std::endl;
-        }
+        if (output.is_open()) output << entry.first << " - " << entry.second << std::endl;
     }
     output.close();
 }
