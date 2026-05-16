@@ -2,11 +2,12 @@
 #ifndef INCLUDE_BST_H_
 #define INCLUDE_BST_H_
 
+#include <string>
 #include <utility>
 #include <vector>
-#include <string>
 
-template <typename T> class BST {
+template<typename T>
+class BST {
 private:
     struct Node {
         T info;
@@ -15,7 +16,17 @@ private:
         Node* right;
     };
     Node* top;
-    Node* connect(Node* current, T value) {
+
+    Node* createNode(const T& value) {
+        Node* newNode = new Node;
+        newNode->info = value;
+        newNode->count = 1;
+        newNode->left = nullptr;
+        newNode->right = nullptr;
+        return newNode;
+    }
+
+    Node* connect(Node* current, const T& value) {
         if (current == nullptr) {
             return createNode(value);
         }
@@ -30,27 +41,22 @@ private:
         }
         return current;
     }
-    Node* createNode(T value) {
-        Node* newNode = new Node;
-        newNode->info = value;
-        newNode->count = 1;
-        newNode->left = nullptr;
-        newNode->right = nullptr;
-        return newNode;
-    }
-    void Data(Node* current, std::vector<std::pair<T, int>>& buffer) {
+
+    void collectData(Node* current, std::vector<std::pair<T, int>>& buffer) {
         if (current == nullptr) return;
-        Data(current->left, buffer);
+        collectData(current->left, buffer);
         buffer.push_back({ current->info, current->count });
-        Data(current->right, buffer);
+        collectData(current->right, buffer);
     }
-    void Erase_all(Node* current) {
+
+    void deleteAll(Node* current) {
         if (current == nullptr) return;
-        Erase_all(current->left);
-        Erase_all(current->right);
+        deleteAll(current->left);
+        deleteAll(current->right);
         delete current;
     }
-    int findCount(Node* current, T value) {
+
+    int findCount(Node* current, const T& value) const {
         if (current == nullptr) return 0;
         if (current->info == value) return current->count;
         if (value < current->info) {
@@ -60,21 +66,35 @@ private:
             return findCount(current->right, value);
         }
     }
-    int com_height(Node* current) {
+
+    int computeHeight(Node* current) const {
         if (current == nullptr) return -1;
-        int leftHeight = com_height(current->left);
-        int rightHeight = com_height(current->right);
+        int leftHeight = computeHeight(current->left);
+        int rightHeight = computeHeight(current->right);
         return 1 + (leftHeight > rightHeight ? leftHeight : rightHeight);
     }
-    
+
 public:
     BST() : top(nullptr) {}
-    ~BST() { Erase_all(top); }
-    void insert(T value) { top = connect(top, value); }
-    int depth() { return com_height(top); }
-    int search(T value) { return findCount(top, value); }
+
+    ~BST() {
+        deleteAll(top);
+    }
+
+    void insert(const T& value) {
+        top = connect(top, value);
+    }
+
+    int depth() const {
+        return computeHeight(top);
+    }
+
+    int search(const T& value) const {
+        return findCount(top, value);
+    }
+
     void collectInfo(std::vector<std::pair<T, int>>& output) {
-        Data(top, output);
+        collectData(top, output);
     }
 };
 
