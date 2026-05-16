@@ -7,7 +7,7 @@
 #include <vector>
 
 template<typename T>
-class BST {
+class BST { 
 private:
     struct Node {
         T info;
@@ -32,11 +32,9 @@ private:
         }
         if (value < current->info) {
             current->left = connect(current->left, value);
-        }
-        else if (value > current->info) {
+        } else if (value > current->info) {
             current->right = connect(current->right, value);
-        }
-        else {
+        } else {
             current->count++;
         }
         return current;
@@ -70,8 +68,7 @@ private:
         }
         if (value < current->info) {
             return findCount(current->left, value);
-        }
-        else {
+        } else {
             return findCount(current->right, value);
         }
     }
